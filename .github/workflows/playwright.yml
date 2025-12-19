@@ -1,26 +1,44 @@
 name: Playwright Tests
+
 on:
   push:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+
 jobs:
   test:
     timeout-minutes: 60
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # Usamos una máquina virtual Linux de GitHub
+
     steps:
+    # 1. Descargar código en la máquina virtual
     - uses: actions/checkout@v4
+
+    # 2. Instalar Node.js
     - uses: actions/setup-node@v4
       with:
         node-version: lts/*
+
+    # 3. Instalar dependencias (npm install)
     - name: Install dependencies
       run: npm ci
+
+    # 4. Instalar los navegadores de Playwright
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
+
+    # 5. IMPORTANTE: Generar los archivos de prueba desde Gherkin
+    - name: Generate BDD Tests
+      run: npx bddgen
+
+    # 6. Ejecutar las pruebas
     - name: Run Playwright tests
       run: npx playwright test
+
+    # 7. Guardar el reporte HTML para que se pueda descargar
     - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
+      if: always() # Se ejecuta aunque fallen las pruebas
       with:
         name: playwright-report
         path: playwright-report/
