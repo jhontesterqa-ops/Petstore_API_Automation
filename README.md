@@ -13,7 +13,7 @@ Sigue estos pasos para levantar el proyecto en tu máquina local:
 
 1.  **Clonar el repositorio:**
     ```bash
-    git clone https://github.com/jhontesterqa-ops/reto2-jho.git
+    git clone https://github.com/jhontesterqa-ops/reto2JHO.git
     cd reto2JHO
     ```
 
